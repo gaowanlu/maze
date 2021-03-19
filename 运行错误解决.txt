@@ -1,0 +1,13 @@
+缺少相应dll文件，可以从此目录下< 可能缺少的dll文件>文件夹内寻找相应系统的(64 或者 32 位)dll文件
+64位:复制到C:\Windows\SysWOW64\下面即可解决
+32位:C:\Windows\System32\ 下面
+
+在< 可能缺少的dll文件>文件夹内没有找到
+可到https://cn.dll-files.com/进行搜索下载
+下载相应64 或 32 位系统dll文件后
+64位:复制到C:\Windows\SysWOW64\下面即可解决
+32位:C:\Windows\System32\ 下面
+
+可以联系开发人员
+QQ：2209120827
+Email: 2209120827@qq.com
