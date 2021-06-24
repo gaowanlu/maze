@@ -1,0 +1,10 @@
+﻿  levelPage.cpp
+C:\Users\gaowanlu\Desktop\MazePro\src\levelPage.cpp(27,26): warning C4309: “参数”: 截断常量值
+C:\Users\gaowanlu\Desktop\MazePro\src\levelPage.cpp(137,15): warning C4101: “point”: 未引用的局部变量
+C:\Users\gaowanlu\Desktop\MazePro\src\levelPage.cpp(180,46): warning C4309: “参数”: 截断常量值
+C:\Users\gaowanlu\Desktop\MazePro\src\levelPage.cpp(180,41): warning C4309: “参数”: 截断常量值
+C:\Users\gaowanlu\Desktop\MazePro\src\levelPage.cpp(180,36): warning C4309: “参数”: 截断常量值
+C:\Users\gaowanlu\Desktop\MazePro\src\levelPage.cpp(223,39): warning C4309: “参数”: 截断常量值
+C:\Users\gaowanlu\Desktop\MazePro\src\levelPage.cpp(253,39): warning C4309: “参数”: 截断常量值
+C:\Users\gaowanlu\Desktop\MazePro\src\levelPage.cpp(284,15): warning C4101: “point”: 未引用的局部变量
+  MazePro.vcxproj -> C:\Users\gaowanlu\Desktop\MazePro\Debug\MazePro.exe

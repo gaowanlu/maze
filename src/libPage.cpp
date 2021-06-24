@@ -3,6 +3,9 @@
 #include"../headfile/prim.h"//Prim
 #include"../headfile/recursionTracing.h"//递归回溯
 #include"../headfile/MazePathFind.h"//dfs寻径
+
+//972 251 1241 299
+
 LibPage::LibPage(MatrixUI& UI):UI(UI){//构造函数
 	for (int i = 0; i < 41; i++) {
 		for (int j = 0; j < 29; j++) {
@@ -26,7 +29,8 @@ int LibPage::process(void) {
 	while (1) {
 		//检测是否到达了终点
 		if (_body.x == 40 && _body.y == 27) {
-			_WinPoPWindow();
+			_WinPoPWindow();//弹窗
+			_setRandomBody();//重新设置老鼠的位置
 		}
 		if (_game&&_kbhit()) {//有按键输入
 			char input = _getch();
@@ -58,30 +62,41 @@ int LibPage::process(void) {
 						return 0;
 					}
 					if (_judgeInRect(m, _buttonRange[2])) {//递归分割
+						reverseStatus = false;
 						_createMap(3);
 						//人的坐标初始化
-						_body.x = 0;
-						_body.y = 1;
-						_setBodyImg(_body.x, _body.y);
+						_setRandomBody();
+						//设置粮仓
+						_setLiangCang();
 					}
 					else if (_judgeInRect(m, _buttonRange[1])) {//递归回溯
+						reverseStatus = false;
 						_createMap(2);
 						//人的坐标初始化
-						_body.x = 0;
-						_body.y = 1;
-						_setBodyImg(_body.x, _body.y);
+						_setRandomBody();
+						//设置粮仓
+						_setLiangCang();
 					}
 					else if (_judgeInRect(m, _buttonRange[0])) {//Prim生成迷宫
+						reverseStatus = false;
 						_createMap(1);
 						//人的坐标初始化
-						_body.x = 0;
-						_body.y = 1;
-						_setBodyImg(_body.x, _body.y);
+						_setRandomBody();
+						//设置粮仓
+						_setLiangCang();
 					}else if (_judgeInRect(m, _buttonRange[3])) {
+						reverseStatus = false;
 						_game = _game ? false : true;
 					}
-					else if (_judgeInRect(m, _buttonRange[4])) {//迷宫寻径
+					else if (_judgeInRect(m, _buttonRange[4]) && reverseStatus==false) {//迷宫寻径
 						_findRoadAndShow();
+						//设置粮仓
+						_setLiangCang();
+					}
+					else if (_judgeInRect(m, _buttonRange[6])){//反转迷宫
+						reverseStatus = !reverseStatus;
+						cout << "反转迷宫\n";
+						_reverseMap();
 					}
 				break;
 			default:break;
@@ -208,6 +223,9 @@ void LibPage::printMap(void) {
 
 //将body移动
 void LibPage::_moveBody(int x, int y) {
+	if (x < 0 || x>40 || y < 0 || y>28) {//不合法位置
+		return;
+	}
 	if (_Map[y][x] != '1') {
 		//将现在的body不显示
 		_setBlockColor(_body.x, _body.y, 255, 255, 255);
@@ -241,6 +259,8 @@ void LibPage::_WinPoPWindow(void) {
 					_setBlockColor(_body.x, _body.y, 255,0,0);
 					_body.x = 0;
 					_body.y = 1;
+					//重新设置粮仓
+					_setLiangCang();
 					return;
 				}
 			}
@@ -301,13 +321,18 @@ void LibPage::_findRoadAndShow(void) {
 void LibPage::_defaultInit(void) {
 	_createMap(1);
 	//人的坐标初始化
-	_body.x = 0;
-	_body.y = 1;
-	_setBodyImg(_body.x, _body.y);
+	_setRandomBody();
+	//设置粮仓
+	_setLiangCang();
 }
 
 //显示人物
 void LibPage::_setBodyImg(int x,int y) {
+	if (x < 0 || x>40 || y < 0 || y>28) {//不合法位置
+		return;
+	}
+	_body.x = x;
+	_body.y = y;
 	//以22像素为长度
 	struct Point point;
 	//左上角为（20，20）
@@ -319,4 +344,64 @@ void LibPage::_setBodyImg(int x,int y) {
 	IMAGE body;
 	loadimage(&body, L"./img/cat.png");
 	putimage(tlx, tly, &body);
+}
+
+//张贴粮仓图片
+void LibPage::_setLiangCang() {
+	int x=40, y=27;
+	_Map[y][x] = '0';
+	//以22像素为长度
+	struct Point point;
+	//左上角为（20，20）
+	int tlx = (x + 1) * 22;
+	int tly = (y + 1) * 22;
+	int rbx = tlx + 22;
+	int rby = tly + 22;
+	//加载人物图片
+	IMAGE liangcang;
+	loadimage(&liangcang, L"./img/liangcang.png");
+	putimage(tlx, tly, &liangcang);
+}
+
+//靠近中央随机位置设置老鼠位置,这个位置需满足不是墙
+void LibPage::_setRandomBody() {
+	//int center
+	int target_x = (rand() % (20 - 14 + 1)) + 14, target_y = (rand() % (20 - 10 + 1)) + 10;
+	while (_Map[target_y][target_x] == '1') {
+		target_x = (rand() % (20 - 14 + 1)) + 14, target_y = (rand() % (20 - 10 + 1)) + 10;
+	}
+	//设置老鼠位置
+	_setBodyImg(target_x,target_y);
+}
+
+//反转迷宫，并重置粮仓，以及老鼠位置等
+void LibPage::_reverseMap() {
+	//反转Map
+	for (int i = 0; i <= 40; i++) {
+		for (int j = 0; j <= 28; j++) {
+			if (_Map[j][i] == '1') {
+				_Map[j][i] = '0';
+			}
+			else {
+				_Map[j][i] = '1';
+			}
+		}
+	}
+	//画出地图
+	//更新界面显示
+	for (int i = 0; i <= 40; i++) {
+		for (int j = 0; j <= 28; j++) {
+			if (_Map[j][i] == '1') {//墙
+				_setBlockColor(i, j, 234, 123, 78);
+			}
+			else if (_Map[j][i] == '0') {//空
+				_setBlockColor(i, j, 255, 255, 255);
+			}
+		}
+	}
+	//重置老鼠
+	_setRandomBody();
+	//重置粮仓
+	_setLiangCang();
+	printMap();
 }

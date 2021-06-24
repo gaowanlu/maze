@@ -16,19 +16,3 @@ int main()
     }
     return 0;
 }
-
-
-//#include<iostream>
-//#include"../headfile/DataBaseMode.h"
-//int main()
-//{
-//    class DataBaseMode Db;
-//    std::string newUserId = "gaowanlu";
-//    std::string newUserPassword = "gaowanlu";
-//    Db.AddUser(newUserId, newUserPassword);
-//    newUserId = "gaowanlu";
-//    Db.DelRecord(newUserId, 5, 0);
-//    Db.PrintAllRecord();
-//
-//    return 0;
-//}

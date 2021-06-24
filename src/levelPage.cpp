@@ -1,6 +1,10 @@
 ﻿#include"../headfile/levelPage.h"
 #include"../headfile/PopUpModule.h"
 LevelPage::LevelPage(unsigned char level) {
+	/*
+	设置不同关卡的
+	*/
+	_NOWLEVEL = level;
 	//加载背景
     IMAGE img;//_backgroundSrc
 	wchar_t backgroundSrc[22];
@@ -25,8 +29,9 @@ LevelPage::LevelPage(unsigned char level) {
 		}
 	}
 	//初始化人的位置
-	_body.x = 0;
+	_body.x = 1;
 	_body.y = 1;
+	_setLiangCang();//设置粮仓
 }
 void LevelPage::process(void) {
 	//设置小人
@@ -37,17 +42,39 @@ void LevelPage::process(void) {
 	RECT r = { 1040, 231, 1257, 304 };
 	//计数器 demo
 	clock_t start = clock();
-	int ss = 0;
+	//设置倒计时初始时间
+	int SUMTIMES[8] = { 400,350,300,250,200,150,100,60 };
+	int TIME = 1000;
+	switch (_NOWLEVEL)
+	{
+	case '1':TIME = SUMTIMES[0]; break;
+	case '2':TIME = SUMTIMES[1]; break;
+	case '3':TIME = SUMTIMES[2]; break;
+	case '4':TIME = SUMTIMES[3]; break;
+	case '5':TIME = SUMTIMES[4]; break;
+	case '6':TIME = SUMTIMES[5]; break;
+	case '7':TIME = SUMTIMES[6]; break;
+	case '8':TIME = SUMTIMES[7]; break;
+	default:TIME = 1000;
+		break;
+	}
+	int ss = TIME;
 	while (1) {//循环事件监听
 		if ((double)(clock() - start) / 1000.0 >= 1.0) {//时间监听
-			ss++;
+			ss--;
 			_showTime(start,ss,&r);
 		}
 		//检测是否到达了终点
 		if (_body.x == 40 && _body.y == 27) {
 			_WinPoPWindow(start, ss);
 			//重置计时
-			ss = 0;
+			ss = TIME;
+		}
+		//检查时间是否已经完了
+		if (ss <= 0) {//结束此居，弹窗再接再厉
+			_alertOver();
+			//重置时间
+			ss = TIME;
 		}
 		if (_kbhit()) {//有按键输入
 			char input = _getch();
@@ -169,7 +196,7 @@ void LevelPage::_WinPoPWindow(clock_t& start, int& ss) {
 	const char* cstr = time_str.data();
 	//字体框变为白色
 	wchar_t ps[1000];
-	swprintf_s(ps, L"用时%S秒", cstr);//%S标志符表示字符串的char与wchar_t相互转换
+	swprintf_s(ps, L"还剩%S秒", cstr);//%S标志符表示字符串的char与wchar_t相互转换
 	setfillcolor(RGB(80,80,80));
 	solidrectangle(650,165,960,215);
 	RECT r = { 650,165,960,215 };
@@ -196,6 +223,37 @@ void LevelPage::_WinPoPWindow(clock_t& start, int& ss) {
 					_setBlockColor(_body.x, _body.y, 255, 0, 0);
 					_body.x = 0;
 					_body.y = 1;
+					_setLiangCang();
+					return;
+				}
+			}
+		}
+	}
+}
+void LevelPage::_alertOver() {
+	PopUpModule popWindow;
+	popWindow.show(L"./img/AlertOver.png");
+
+	int points[4];
+	popWindow.getBackButton(points);
+	Rect backButton = { points[0],points[1], points[2], points[3] };
+	MOUSEMSG m;
+	while (1) {
+		//cout << "闯关弹窗事件监听\n";
+		if (MouseHit()) {
+			m = GetMouseMsg();
+			switch (m.uMsg)//鼠标事件
+			{
+			case WM_LBUTTONDOWN:
+				cout << "点击鼠标\n";
+				if (_judgeInRect(m, backButton)) {//退出
+					cout << "点击叉号\n";
+					popWindow.reset();
+					//人回到终点并将终点涂白
+					_setBlockColor(_body.x, _body.y, 255, 0, 0);
+					_body.x = 0;
+					_body.y = 1;
+					_setLiangCang();
 					return;
 				}
 			}
@@ -216,4 +274,21 @@ void LevelPage::_showTime(clock_t& start,int& ss,RECT *r) {
 	if (ss >= 100000) {
 		ss = 0;
 	}
+}
+
+//张贴粮仓图片
+void LevelPage::_setLiangCang() {
+	int x = 40, y = 27;
+	_Map[y][x] = '0';
+	//以22像素为长度
+	struct Point point;
+	//左上角为（20，20）
+	int tlx = (x + 1) * 22;
+	int tly = (y + 1) * 22;
+	int rbx = tlx + 22;
+	int rby = tly + 22;
+	//加载人物图片
+	IMAGE liangcang;
+	loadimage(&liangcang, L"./img/liangcang.png");
+	putimage(tlx, tly, &liangcang);
 }

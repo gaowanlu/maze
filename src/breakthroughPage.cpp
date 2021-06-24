@@ -156,3 +156,5 @@ void BreakthroughPage::_resetUI(void) {
     loadimage(&img, _T("./img/breakthroughpage.png"));
     putimage(0, 0, &img);
 }
+
+

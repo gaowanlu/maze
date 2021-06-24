@@ -89,11 +89,12 @@ void RecursionTracing::createMaze(void) {
 			_Map[i][j] = '1';
 		}
 	}
-	_Map[1][0] = '0';
+
 	_Map[_height - 2][_width - 1] = '0';
 	//起点置为'0'
-	_Map[1][1] = '0';
+	//_Map[1][1] = '0';
 	_algorithm();//Prim随机生成迷宫算法
+	_Map[1][0] = '1';
 }
 
 void RecursionTracing::resetMap() {

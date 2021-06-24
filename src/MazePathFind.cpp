@@ -91,7 +91,7 @@ Road MazePathFind::dfs(int sx, int sy, int ex, int ey)
     {
         int ltx = sx + x[i];
         int lty = sy + y[i];
-        if ((ltx >= 0) && (ltx <= WIDTH - 1) && (lty >= 0) && (lty <= HEIGHT - 1) && (_Map[lty][ltx] == '0'))
+        if ((ltx >= 0) && (ltx <= WIDTH - 1) && (lty >=0) && (lty <= HEIGHT - 1) && (_Map[lty][ltx] == '0'))
         {
             //沿着有路的方向寻找，
             dfs(ltx, lty, ex, ey);

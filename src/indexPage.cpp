@@ -81,7 +81,7 @@ int IndexPage::process(void) {
         for (int j = 0; j < 50; j++) {
             point.y = j;
             point.x = i;
-            UI.setUIBuffer(point, 222, 119, 122);
+            UI.setUIBuffer(point,180,124,72);
         }
     }
 

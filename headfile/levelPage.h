@@ -27,6 +27,8 @@ private:
 		{1042,1198,634,685},
 		{2,6,7,8}
 	};
+	//此时的关卡
+	char _NOWLEVEL;
 	int _getMouseState(MOUSEMSG& m);
 	bool _judgeInRect(MOUSEMSG& m, struct Rect rect);
 	//存储人的位置
@@ -39,6 +41,8 @@ private:
 	void _moveBody(int x, int y);
 	void _WinPoPWindow(clock_t& start, int& ss);
 	void _showTime(clock_t& start,int&ss, RECT* r);
+	void _setLiangCang();
+	void _alertOver();
 public:
 	LevelPage(unsigned char level);
 	void process(void);

@@ -59,9 +59,9 @@ void Division::createMaze(void) {
 		_Map[_height - 1][i] = '1';
 	}
 	//设置出口与入口
-	_Map[1][0] = '0';
 	_Map[_height - 2][_width - 1] = '0';
 	//生成迷宫
+	_Map[1][0] = '1';
 	_algorithm(1, 1, _width - 2, _height - 2);
 }
 
