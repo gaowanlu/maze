@@ -1,8 +1,8 @@
 #pragma once
 #ifndef __BREAKTHROUGHPAGE_H__
 #define __BREAKTHROUGHPAGE_H__
-#include"./matrixUI.h"
-#include"./levelPage.h"
+#include"matrixUI.h"
+#include"levelPage.h"
 class BreakthroughPage {
 	struct Rect {
 		int ltx;

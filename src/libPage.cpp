@@ -1,8 +1,8 @@
-#include"../headfile/libPage.h"
-#include"../headfile/RecursiveSegmentation.h"//递归分割
-#include"../headfile/prim.h"//Prim
-#include"../headfile/recursionTracing.h"//递归回溯
-#include"../headfile/MazePathFind.h"//dfs寻径
+#include"libPage.h"
+#include"RecursiveSegmentation.h"//递归分割
+#include"prim.h"//Prim
+#include"recursionTracing.h"//递归回溯
+#include"MazePathFind.h"//dfs寻径
 
 //972 251 1241 299
 
@@ -32,74 +32,72 @@ int LibPage::process(void) {
 			_WinPoPWindow();//弹窗
 			_setRandomBody();//重新设置老鼠的位置
 		}
-		if (_game&&_kbhit()) {//有按键输入
-			char input = _getch();
-			switch (input)
-			{
-			case 'w'://上
-				_moveBody(_body.x,_body.y-1);
-				break;
-			case 's'://下
-				_moveBody(_body.x, _body.y + 1);
-				break;
-			case 'a'://左
-				_moveBody(_body.x-1, _body.y);
-				break;
-			case 'd'://右
-				_moveBody(_body.x+1, _body.y);
-				break;
-			default:
-				break;
+		ExMessage message;
+		if (peekmessage(&message, EM_CHAR | EM_MOUSE)) {//有按键输入
+			if (_game && message.message == WM_CHAR) {
+				char input = message.ch;
+				switch (input)
+				{
+				case 'w'://上
+					_moveBody(_body.x, _body.y - 1);
+					break;
+				case 's'://下
+					_moveBody(_body.x, _body.y + 1);
+					break;
+				case 'a'://左
+					_moveBody(_body.x - 1, _body.y);
+					break;
+				case 'd'://右
+					_moveBody(_body.x + 1, _body.y);
+					break;
+				default:
+					break;
+				}
 			}
-		}
-		if (MouseHit()) {
-			m = GetMouseMsg();
-			switch (m.uMsg)//鼠标事件
+			if (message.lbutton)//鼠标事件
 			{
-				case WM_LBUTTONDOWN:
-					if (_judgeInRect(m, _buttonRange[5])) {//退出
-						_game = false;
-						return 0;
-					}
-					if (_judgeInRect(m, _buttonRange[2])) {//递归分割
-						reverseStatus = false;
-						_createMap(3);
-						//人的坐标初始化
-						_setRandomBody();
-						//设置粮仓
-						_setLiangCang();
-					}
-					else if (_judgeInRect(m, _buttonRange[1])) {//递归回溯
-						reverseStatus = false;
-						_createMap(2);
-						//人的坐标初始化
-						_setRandomBody();
-						//设置粮仓
-						_setLiangCang();
-					}
-					else if (_judgeInRect(m, _buttonRange[0])) {//Prim生成迷宫
-						reverseStatus = false;
-						_createMap(1);
-						//人的坐标初始化
-						_setRandomBody();
-						//设置粮仓
-						_setLiangCang();
-					}else if (_judgeInRect(m, _buttonRange[3])) {
-						reverseStatus = false;
-						_game = _game ? false : true;
-					}
-					else if (_judgeInRect(m, _buttonRange[4]) && reverseStatus==false) {//迷宫寻径
-						_findRoadAndShow();
-						//设置粮仓
-						_setLiangCang();
-					}
-					else if (_judgeInRect(m, _buttonRange[6])){//反转迷宫
-						reverseStatus = !reverseStatus;
-						cout << "反转迷宫\n";
-						_reverseMap();
-					}
-				break;
-			default:break;
+				if (_judgeInRect(message, _buttonRange[5])) {//退出
+					_game = false;
+					return 0;
+				}
+				if (_judgeInRect(message, _buttonRange[2])) {//递归分割
+					reverseStatus = false;
+					_createMap(3);
+					//人的坐标初始化
+					_setRandomBody();
+					//设置粮仓
+					_setLiangCang();
+				}
+				else if (_judgeInRect(message, _buttonRange[1])) {//递归回溯
+					reverseStatus = false;
+					_createMap(2);
+					//人的坐标初始化
+					_setRandomBody();
+					//设置粮仓
+					_setLiangCang();
+				}
+				else if (_judgeInRect(message, _buttonRange[0])) {//Prim生成迷宫
+					reverseStatus = false;
+					_createMap(1);
+					//人的坐标初始化
+					_setRandomBody();
+					//设置粮仓
+					_setLiangCang();
+				}
+				else if (_judgeInRect(message, _buttonRange[3])) {
+					reverseStatus = false;
+					_game = _game ? false : true;
+				}
+				else if (_judgeInRect(message, _buttonRange[4]) && reverseStatus == false) {//迷宫寻径
+					_findRoadAndShow();
+					//设置粮仓
+					_setLiangCang();
+				}
+				else if (_judgeInRect(message, _buttonRange[6])) {//反转迷宫
+					reverseStatus = !reverseStatus;
+					cout << "反转迷宫\n";
+					_reverseMap();
+				}
 			}
 		}
 	}
@@ -133,7 +131,7 @@ void LibPage::_setUIBuffer(struct Point point, char r, char g, char b) {
 }
 
 
-bool LibPage::_judgeInRect(MOUSEMSG& m, struct Rect rect) {
+bool LibPage::_judgeInRect(ExMessage& m, struct Rect rect) {
 	if (m.x >= rect.ltx && m.x <= rect.rbx && m.y >= rect.lty && m.y <= rect.rby) {
 		return true;
 	}
@@ -243,20 +241,15 @@ void LibPage::_WinPoPWindow(void) {
 	int points[4];
 	popWindow.getBackButton(points);
 	Rect backButton = { points[0],points[1], points[2], points[3] };
-	MOUSEMSG m;
+	ExMessage message;
 	while (1) {
-		if (MouseHit()) {
-			//cout << "click\n";
-			//cout << backButton.ltx << backButton.lty << backButton.rbx << backButton.rby << "\n";
-			m = GetMouseMsg();
-			switch (m.uMsg)//鼠标事件
-			{
-			case WM_LBUTTONDOWN:
-				if (_judgeInRect(m, backButton) ){//退出
+		if (peekmessage(&message)) {
+			if (message.lbutton) {
+				if (_judgeInRect(message, backButton)) {//退出
 					cout << "点击叉号\n";
 					popWindow.reset();
 					//人回到终点并将终点涂白
-					_setBlockColor(_body.x, _body.y, 255,0,0);
+					_setBlockColor(_body.x, _body.y, 255, 0, 0);
 					_body.x = 0;
 					_body.y = 1;
 					//重新设置粮仓

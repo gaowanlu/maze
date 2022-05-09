@@ -1,4 +1,4 @@
-#include"../headfile/matrixUI.h"
+#include"matrixUI.h"
 //¹¹Ôìº¯Êý
 MatrixUI::MatrixUI() {
 

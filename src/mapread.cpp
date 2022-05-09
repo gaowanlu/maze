@@ -1,4 +1,4 @@
-#include"../headfile/mapread.h"
+#include"mapread.h"
 MapRead::MapRead() {
 
 }

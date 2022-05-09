@@ -1,8 +1,8 @@
 #pragma once
 #ifndef __LIBPAGE_H__
 #define __LIBPAGE_H__
-#include"./matrixUI.h"
-#include"./PopUpModule.h"//弹窗模块
+#include"matrixUI.h"
+#include"PopUpModule.h"//弹窗模块
 class LibPage {
 struct Rect {
 		int ltx;
@@ -25,7 +25,7 @@ private:
 	int _width = 42, _height = 29;
 	bool _game = false;//是否为可游戏模式
 	struct Point _body = { 0,1 };
-	bool _judgeInRect(MOUSEMSG& m, struct Rect rect);//判断鼠标是否在矩形范围内
+	bool _judgeInRect(ExMessage& m, struct Rect rect);//判断鼠标是否在矩形范围内
 	void _setBlockColor(int x,int y,char r,char g,char b);
 	void _setUIBuffer(struct Point point, char r, char g, char b);
 	void _createMap(int type);//不同算法产生随机地图并将图形界面更新到窗口上面

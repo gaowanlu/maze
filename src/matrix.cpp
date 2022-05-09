@@ -1,4 +1,4 @@
-﻿#include"../headfile/matrix.h"
+﻿#include"matrix.h"
 int main()
 {
     MatrixUI UI;

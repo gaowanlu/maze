@@ -1,8 +1,8 @@
 #pragma once
 #ifndef __LEVELPAGE_H__
 #define __LEVELPAGE_H__
-#include"./matrixUI.h"
-#include"./mapread.h"
+#include"matrixUI.h"
+#include"mapread.h"
 #include<ctime>
 #include <sstream>
 #include <string>
@@ -29,8 +29,8 @@ private:
 	};
 	//此时的关卡
 	char _NOWLEVEL;
-	int _getMouseState(MOUSEMSG& m);
-	bool _judgeInRect(MOUSEMSG& m, struct Rect rect);
+	int _getMouseState(ExMessage& m);
+	bool _judgeInRect(ExMessage& m, struct Rect rect);
 	//存储人的位置
 	Point _body;
 	//存储迷宫地图

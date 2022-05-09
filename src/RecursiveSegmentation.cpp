@@ -1,4 +1,4 @@
-#include"../headfile/RecursiveSegmentation.h"
+#include"RecursiveSegmentation.h"
 #include<cstdlib>
 #include<cstdio>
 

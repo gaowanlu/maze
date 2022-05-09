@@ -1,4 +1,4 @@
-#include"../headfile/indexPage.h"
+#include"indexPage.h"
 IndexPage::IndexPage(MatrixUI& UI):UI(UI){//¹¹Ôìº¯Êý
 
 }

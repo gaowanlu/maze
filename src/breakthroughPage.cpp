@@ -1,4 +1,4 @@
-#include"../headfile/breakthroughPage.h"
+#include"breakthroughPage.h"
 BreakthroughPage::BreakthroughPage(MatrixUI& UI):UI(UI) {//¹¹Ôìº¯Êý
 
 }

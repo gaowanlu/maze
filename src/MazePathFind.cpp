@@ -1,5 +1,5 @@
-#include"../headfile/MazePathFind.h"
-#include"../headfile/matrixUI.h"
+#include"MazePathFind.h"
+#include"matrixUI.h"
 
 //¹¹Ôìº¯Êý
 MazePathFind::MazePathFind(char**map,int Width, int Height) {

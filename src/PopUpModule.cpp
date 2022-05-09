@@ -1,4 +1,4 @@
-#include"../headfile/PopUpModule.h"
+#include"PopUpModule.h"
 void PopUpModule::reset(void) {
 	putimage(
 		(_screenWidth - _popWidth) / 2,

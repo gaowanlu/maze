@@ -1,5 +1,5 @@
-﻿#include"../headfile/levelPage.h"
-#include"../headfile/PopUpModule.h"
+﻿#include"levelPage.h"
+#include"PopUpModule.h"
 LevelPage::LevelPage(unsigned char level) {
 	/*
 	设置不同关卡的
@@ -76,32 +76,31 @@ void LevelPage::process(void) {
 			//重置时间
 			ss = TIME;
 		}
-		if (_kbhit()) {//有按键输入
-			char input = _getch();
-			switch (input)
-			{
-			case 'w'://上
-				_moveBody(_body.x, _body.y - 1);
-				break;
-			case 's'://下
-				_moveBody(_body.x, _body.y + 1);
-				break;
-			case 'a'://左
-				_moveBody(_body.x - 1, _body.y);
-				break;
-			case 'd'://右
-				_moveBody(_body.x + 1, _body.y);
-				break;
-			default:
-				break;
+		ExMessage message;
+		if (peekmessage(&message, EM_CHAR|EM_MOUSE)) {//有按键输入
+			if (message.message == WM_CHAR) {
+				char input = message.ch;
+				switch (input)
+				{
+				case 'w'://上
+					_moveBody(_body.x, _body.y - 1);
+					break;
+				case 's'://下
+					_moveBody(_body.x, _body.y + 1);
+					break;
+				case 'a'://左
+					_moveBody(_body.x - 1, _body.y);
+					break;
+				case 'd'://右
+					_moveBody(_body.x + 1, _body.y);
+					break;
+				default:
+					break;
+				}
 			}
-		}
-		if (MouseHit()) {
-			m = GetMouseMsg();
-			switch (m.uMsg)//鼠标事件
+			if (message.lbutton)//鼠标事件
 			{
-			case WM_LBUTTONDOWN:
-				if (_getMouseState(m) == 0) {
+				if (_getMouseState(message) == 0) {
 					return;
 				}
 			}
@@ -110,7 +109,7 @@ void LevelPage::process(void) {
 }
 
 //获得鼠标事件
-int LevelPage::_getMouseState(MOUSEMSG& m) {
+int LevelPage::_getMouseState(ExMessage& m) {
     for (int i = 0; i < 2; i++) {
         if (_buttonDatas[i].ltx<m.x&&m.x<_buttonDatas[i].rbx) {
             if (_buttonDatas[i].lty < m.y && m.y < _buttonDatas[i].rby) {
@@ -122,7 +121,7 @@ int LevelPage::_getMouseState(MOUSEMSG& m) {
 }
 
 //判断鼠标是否在一定的范围内
-bool LevelPage::_judgeInRect(MOUSEMSG& m, struct Rect rect) {
+bool LevelPage::_judgeInRect(ExMessage& m, struct Rect rect) {
 	if (m.x >= rect.ltx && m.x <= rect.rbx && m.y >= rect.lty && m.y <= rect.rby) {
 		return true;
 	}
@@ -207,15 +206,11 @@ void LevelPage::_WinPoPWindow(clock_t& start, int& ss) {
 	int points[4];
 	popWindow.getBackButton(points);
 	Rect backButton = { points[0],points[1], points[2], points[3] };
-	MOUSEMSG m;
+	ExMessage m;
 	while (1) {
 		//cout << "闯关弹窗事件监听\n";
-		if (MouseHit()) {
-			m = GetMouseMsg();
-			switch (m.uMsg)//鼠标事件
-			{
-			case WM_LBUTTONDOWN:
-				cout << "点击鼠标\n";
+		getmessage(&m);
+		if (m.lbutton) {
 				if (_judgeInRect(m, backButton)) {//退出
 					cout << "点击叉号\n";
 					popWindow.reset();
@@ -227,7 +222,6 @@ void LevelPage::_WinPoPWindow(clock_t& start, int& ss) {
 					return;
 				}
 			}
-		}
 	}
 }
 void LevelPage::_alertOver() {
@@ -237,25 +231,21 @@ void LevelPage::_alertOver() {
 	int points[4];
 	popWindow.getBackButton(points);
 	Rect backButton = { points[0],points[1], points[2], points[3] };
-	MOUSEMSG m;
+	ExMessage m;
 	while (1) {
-		//cout << "闯关弹窗事件监听\n";
-		if (MouseHit()) {
-			m = GetMouseMsg();
-			switch (m.uMsg)//鼠标事件
-			{
-			case WM_LBUTTONDOWN:
-				cout << "点击鼠标\n";
-				if (_judgeInRect(m, backButton)) {//退出
-					cout << "点击叉号\n";
-					popWindow.reset();
-					//人回到终点并将终点涂白
-					_setBlockColor(_body.x, _body.y, 255, 0, 0);
-					_body.x = 0;
-					_body.y = 1;
-					_setLiangCang();
-					return;
-				}
+		getmessage(&m);
+		if(m.lbutton)//鼠标事件
+		{
+			cout << "点击鼠标\n";
+			if (_judgeInRect(m, backButton)) {//退出
+				cout << "点击叉号\n";
+				popWindow.reset();
+				//人回到终点并将终点涂白
+				_setBlockColor(_body.x, _body.y, 255, 0, 0);
+				_body.x = 0;
+				_body.y = 1;
+				_setLiangCang();
+				return;
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-#include"../headfile/prim.h"
+#include"prim.h"
 #include<cstdlib>
 #include<cstdio>
 #include<vector>
