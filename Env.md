@@ -12,13 +12,14 @@ For detailed configuration, please refer to the steps on the EasyX official webs
 
 Configure the library header file directory
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2c339d1535374644a01c9dde21f86f97.png)
+<div align=center><img width="600" src="./assets/using_easyx_within_the_project.png"/></div>
 
 Configure Link Options
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/383d97622c3349cd93760fba0ed580c6.png)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/f18281bdf3614cdfafe2f1a222155537.png)
+<div align=center><img width="600" src="./assets/configure_link_options.png"/></div>
+
+<div align=center><img width="600" src="./assets/configure_link_options_2.png"/></div>
 
 ### Run Project
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/bd141fbb2f2d4158b8f49beec94b2e77.png)
+<div align=center><img width="600" src="./assets/run_project.png"/></div>

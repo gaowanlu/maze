@@ -25,19 +25,19 @@ Using the keyboard wasd to move the target body
 
 - Game homepage
 
-<div align=center><img width="600" src="./readmeasset/game_homepage.png"/></div>
+<div align=center><img width="600" src="./assets/game_homepage.png"/></div>
 
 - Game Lab Interface
 
-<div align=center><img width="600" src="./readmeasset/game_lab_interface.png"/></div>
+<div align=center><img width="600" src="./assets/game_lab_interface.png"/></div>
 
 - Challenge menu
 
-<div align=center><img width="600" src="./readmeasset/challenge_menu.png"/></div>
+<div align=center><img width="600" src="./assets/challenge_menu.png"/></div>
 
 - Pass through levels
 
-<div align=center><img width="600" src="./readmeasset/pass_through_levels.png"/></div>
+<div align=center><img width="600" src="./assets/pass_through_levels.png"/></div>
 
 ## Thanks
 
